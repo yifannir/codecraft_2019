@@ -179,6 +179,7 @@ class Car implements Cloneable, Comparable<Car> {
     int fixNextRoad;
     boolean isPriorityCar;
     boolean isPresetCar;
+    int presetRoadCount;
     int startCrossID;
     int endCrossID;
     int carID;
@@ -274,6 +275,7 @@ class Car implements Cloneable, Comparable<Car> {
         this.isPriorityCar = pri==1;
         this.isPresetCar = preset==1;
         this.kasi = false;
+        this.presetRoadCount = 0;
     }
 
     int getRealSpeedOnNowRoad() {
@@ -350,6 +352,20 @@ class Car implements Cloneable, Comparable<Car> {
             cross = nowRoad.toCross;
         else
             cross = nowRoad.fromCross;
+
+        //预置车辆得到下一条路。
+        if (isPresetCar){
+            if (nextRoad == null && getTypeOfForwordCar().forwardStatus == Car.FORWORD_NEED_THROUGH_CROSS) {
+                for (int i = 0; i < 4; i++) {
+                    if (cross.crossRoads[i] != null && cross.crossRoads[i].roadID ==roadChoiceList.get(presetRoadCount) ) { //道路不为空而且是那条路
+                        nextRoad = cross.crossRoads[i];
+                        presetRoadCount++;
+                        return;
+                    }
+                }
+            }
+            return;
+        }
 
 
         if (nextRoad == null && getTypeOfForwordCar().forwardStatus == Car.FORWORD_NEED_THROUGH_CROSS) {
@@ -459,57 +475,73 @@ class Car implements Cloneable, Comparable<Car> {
         }
     }
 
-
     //首次出发得到第一条路
     public void getFistChoice(Func func) {
-        float score = 0x3f3f3f3f;
-        for (int i = 0; i < 4; i++) {
-            if (startCross.crossRoads[i] != null) { //道路不为空
-                // 双车道时，起点或者终点为所选的第二个节点即可，单车道道时必须时终点为第二个节点。
-                if (startCross.crossRoads[i].isDuplex) {
-                    if (startCross.crossID == startCross.crossRoads[i].toCross.crossID) {
-                        float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(startCross.crossRoads[i].fromCross.crossID), graphMapCross.get(endCrossID));
-                        float len = startCross.crossRoads[i].roadLength;
-                        float speed = Math.min(maxSpeedofCar, startCross.crossRoads[i].speedLimitofRoad);
-                        tmp += len / speed;
-
-                        if (tmp < score) {
-                            nowRoad = startCross.crossRoads[i];
-                            nextRoad = null;//ccg开始上路，nextroad为null
-                            isForwardRoad = false;
-                            score = tmp;
-                        }
-                    } else if (startCross.crossID == startCross.crossRoads[i].fromCross.crossID) {
-                        float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(startCross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
-                        float len = startCross.crossRoads[i].roadLength;
-                        float speed = Math.min(maxSpeedofCar, startCross.crossRoads[i].speedLimitofRoad);
-                        tmp += len / speed;
-
-                        if (tmp < score) {
-                            nowRoad = startCross.crossRoads[i];
-                            nextRoad = null;//ccg开始上路，nextroad为null
-                            isForwardRoad = true;
-                            score = tmp;
-                        }
+        //如果是预置车辆
+        if (isPresetCar){
+            for (int i = 0; i < 4; i++) {
+                if (startCross.crossRoads[i] != null && startCross.crossRoads[i].roadID == roadChoiceList.get(presetRoadCount)) { //道路不为空而且为所在的道路
+                    nowRoad = startCross.crossRoads[i];
+                    nextRoad = null;
+                    if (startCross.crossID == startCross.crossRoads[i].fromCross.crossID){
+                        isForwardRoad = true;
+                    }else {
+                        isForwardRoad = false;
                     }
-                } else if (!startCross.crossRoads[i].isDuplex) {
-                    if (startCross.crossID == startCross.crossRoads[i].fromCross.crossID) {
-                        float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(startCross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
-                        float len = startCross.crossRoads[i].roadLength;
-                        float speed = Math.min(maxSpeedofCar, startCross.crossRoads[i].speedLimitofRoad);
-                        tmp += len / speed;
+                    presetRoadCount++;
+                }
+            }
+        }else {
+            float score = 0x3f3f3f3f;
+            for (int i = 0; i < 4; i++) {
+                if (startCross.crossRoads[i] != null) { //道路不为空
+                    // 双车道时，起点或者终点为所选的第二个节点即可，单车道道时必须时终点为第二个节点。
+                    if (startCross.crossRoads[i].isDuplex) {
+                        if (startCross.crossID == startCross.crossRoads[i].toCross.crossID) {
+                            float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(startCross.crossRoads[i].fromCross.crossID), graphMapCross.get(endCrossID));
+                            float len = startCross.crossRoads[i].roadLength;
+                            float speed = Math.min(maxSpeedofCar, startCross.crossRoads[i].speedLimitofRoad);
+                            tmp += len / speed;
 
-                        if (tmp < score) {
-                            nowRoad = startCross.crossRoads[i];
-                            nextRoad = null;//ccg开始上路，nextroad为null。nextRoad = startCross.crossRoads[i];改
-                            isForwardRoad = true;
-                            score = tmp;
+                            if (tmp < score) {
+                                nowRoad = startCross.crossRoads[i];
+                                nextRoad = null;//ccg开始上路，nextroad为null
+                                isForwardRoad = false;
+                                score = tmp;
+                            }
+                        } else if (startCross.crossID == startCross.crossRoads[i].fromCross.crossID) {
+                            float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(startCross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
+                            float len = startCross.crossRoads[i].roadLength;
+                            float speed = Math.min(maxSpeedofCar, startCross.crossRoads[i].speedLimitofRoad);
+                            tmp += len / speed;
+
+                            if (tmp < score) {
+                                nowRoad = startCross.crossRoads[i];
+                                nextRoad = null;//ccg开始上路，nextroad为null
+                                isForwardRoad = true;
+                                score = tmp;
+                            }
+                        }
+                    } else if (!startCross.crossRoads[i].isDuplex) {
+                        if (startCross.crossID == startCross.crossRoads[i].fromCross.crossID) {
+                            float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(startCross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
+                            float len = startCross.crossRoads[i].roadLength;
+                            float speed = Math.min(maxSpeedofCar, startCross.crossRoads[i].speedLimitofRoad);
+                            tmp += len / speed;
+
+                            if (tmp < score) {
+                                nowRoad = startCross.crossRoads[i];
+                                nextRoad = null;//ccg开始上路，nextroad为null。nextRoad = startCross.crossRoads[i];改
+                                isForwardRoad = true;
+                                score = tmp;
+                            }
                         }
                     }
                 }
             }
+            roadOffset = nowRoad.roadLength;
+
         }
-        roadOffset = nowRoad.roadLength;
     }
 
     /*
