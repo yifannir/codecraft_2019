@@ -18,8 +18,10 @@ public class Main {
         String carPath = args[0];
         String roadPath = args[1];
         String crossPath = args[2];
-        String answerPath = args[3];
-        logger.info("carPath = " + carPath + " roadPath = " + roadPath + " crossPath = " + crossPath + " and answerPath = " + answerPath);
+        String presetAnswerPath = args[3];
+        String answerPath = args[4];
+
+        logger.info("carPath = " + carPath + " roadPath = " + roadPath + " crossPath = " + crossPath + " presetAnswerPath = " + presetAnswerPath + " and answerPath = " + answerPath);
 
         logger.info("start read input files");
 
@@ -34,7 +36,7 @@ public class Main {
         HashMap<Integer, Car> carHashMap = new HashMap<>();
         HashMap<Integer, Cross> crossHashMap = new HashMap<>();
 
-        // car的信息读到carFileInfo里面，每一行5个数字，分别为(id,from,to,speed,planTime)
+        // car的信息读到carFileInfo里面，每一行5个数字，分别为(id,from,to,speed,planTime,是否优先，是否预置)
         ArrayList<int[]> carFileInfo = new ArrayList<>();
 
         // road的信息读到roadFileInfo里面，每一行7个数字，分别为#(id,length,speed,channel,from,to,isDuplex)
@@ -42,29 +44,17 @@ public class Main {
 
         // cross的信息读到crossFileInfo里面，每一行5个数字，分别为#(id,roadId,roadId,roadId,roadId)
         ArrayList<int[]> crossFileInfo = new ArrayList<>();
+
         Func func = new Func();
         func.readFile(carPath, roadPath, crossPath, carFileInfo, roadFileInfo, crossFileInfo);
 
         //处理输入数据到类
         func.processData(carFileInfo, roadFileInfo, crossFileInfo, cars, roads, crosses, roadHashMap, carHashMap, crossHashMap);
-        Collections.sort(cars, new Comparator<Car>() {
-            @Override
-            public int compare(Car o1, Car o2) {
-                if (o1 != null && o2 != null) {
-                    return o1.carID - o2.carID;
-                }
-                return 0;
-            }
-        });
-        Collections.sort(crosses, new Comparator<Cross>() {
-            @Override
-            public int compare(Cross o1, Cross o2) {
-                if (o1 != null && o2 != null) {
-                    return o1.crossID - o2.crossID;
-                }
-                return 0;
-            }
-        });
+
+        //处理预置车辆的choicelist。
+        func.processPresetCar(carHashMap,presetAnswerPath);
+
+
 
 //        Random random = new Random(2000);
 //        for (int i = 0; i < cars.size(); i++) {
@@ -188,6 +178,7 @@ class Car implements Cloneable, Comparable<Car> {
     public static final int FORWORD_NEED_THROUGH_CROSS = 3;
     int fixNextRoad;
     boolean isPriorityCar;
+    boolean isPresetCar;
     int startCrossID;
     int endCrossID;
     int carID;
@@ -273,13 +264,15 @@ class Car implements Cloneable, Comparable<Car> {
      *
      * @return
      */
-    public Car(int carID, int fromCrossID, int toCrossID, int maxSpeedofCar, int planTime) {
+    public Car(int carID, int fromCrossID, int toCrossID, int maxSpeedofCar, int planTime,int pri,int preset) {
         this.carID = carID;
         this.startCrossID = fromCrossID;
         this.endCrossID = toCrossID;
         this.maxSpeedofCar = maxSpeedofCar;
         this.minStartTime = planTime;
         this.minTimeCount = planTime;
+        this.isPriorityCar = pri==1;
+        this.isPresetCar = preset==1;
         this.kasi = false;
     }
 

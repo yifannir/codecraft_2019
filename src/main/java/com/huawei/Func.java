@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class Func {
-    public void readFile(String carPath, String roadPath, String crossPath, ArrayList<int[]> carFileInfo, ArrayList<int[]> roadFileInfo, ArrayList<int[]> crossFileInfo) {
+    public void readFile( String carPath, String roadPath, String crossPath,ArrayList<int[]> carFileInfo, ArrayList<int[]> roadFileInfo, ArrayList<int[]> crossFileInfo) {
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(carPath));
@@ -16,7 +16,7 @@ public class Func {
                 str = str.replace(" ", "");
                 str = str.trim();
                 String[] strlist = str.split(",");
-                int[] intlist = new int[5];
+                int[] intlist = new int[7];
                 for (int i = 0; i < strlist.length; i++) {
                     intlist[i] = Integer.parseInt(strlist[i]);
                 }
@@ -174,7 +174,8 @@ public class Func {
                             ArrayList<Car> cars_in, ArrayList<Road> roads, ArrayList<Cross> crosses,
                             HashMap<Integer, Road> roadHashMap, HashMap<Integer, Car> carHashMap, HashMap<Integer, Cross> crossHashMap) {
         for (int i = 0; i < carFileInfo.size(); i++) {
-            cars_in.add(new Car(carFileInfo.get(i)[0], carFileInfo.get(i)[1], carFileInfo.get(i)[2], carFileInfo.get(i)[3], carFileInfo.get(i)[4]));
+            cars_in.add(new Car(carFileInfo.get(i)[0], carFileInfo.get(i)[1], carFileInfo.get(i)[2],
+                    carFileInfo.get(i)[3], carFileInfo.get(i)[4],carFileInfo.get(i)[5],carFileInfo.get(i)[6]));
         }
 
         //#(id,length,speed,channel,from,to,isDuplex)
@@ -354,4 +355,31 @@ public class Func {
     }
 
 
+    public void processPresetCar(HashMap<Integer, Car> carsHashMap, String presetAnswerPath) {
+        //预置路径文件读取
+        BufferedReader inpreset = null;
+        try {
+            inpreset = new BufferedReader(new FileReader(presetAnswerPath));
+            String str;
+            while ((str = inpreset.readLine()) != null) {
+                if (str.contains("#")) continue;
+                str = str.replace("(", "");
+                str = str.replace(")", "");
+                str = str.replace(" ", "");
+                str = str.trim();
+                String[] strlist = str.split(",");
+                int carId = Integer.parseInt(strlist[0]);
+                int carStartTime = Integer.parseInt(strlist[1]);
+                carsHashMap.get(carId).minStartTime = carStartTime;
+                carsHashMap.get(carId).realStartTime = carStartTime;
+                for (int i = 2; i < strlist.length; i++) {
+                    int roadId = Integer.parseInt(strlist[i]);
+                    carsHashMap.get(carId).roadChoiceList.add(roadId);
+                }
+            }
+            inpreset.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
