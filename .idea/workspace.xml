@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="14b5b4a0-6a0e-441a-a96c-1ccfb4413fb0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/huawei/Func.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/huawei/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/huawei/Main.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -16,11 +18,12 @@
     <session id="-1324913424">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -35,12 +38,45 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="1197" />
+          <entry key="java" value="2008" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1197" />
+          <entry key="JAVA" value="2008" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="118220537">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="5" />
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.1" value="2" />
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="java" value="3153" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JAVA" value="3153" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="java" value="7" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JAVA" value="7" />
         </counts>
       </usages-collector>
     </session>
@@ -50,48 +86,75 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="361" column="42" selection-start-line="361" selection-start-column="42" selection-end-line="361" selection-end-column="42" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Func.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1083">
-              <caret line="376" column="51" selection-start-line="376" selection-start-column="51" selection-end-line="376" selection-end-column="51" />
+            <state relative-caret-position="-323">
+              <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
               <folding>
-                <element signature="method#readFile#0;class#Func#0" />
-                <element signature="method#copyData#0;class#Func#0" />
-                <element signature="method#processData#0;class#Func#0" />
-                <element signature="method#writeFile#0;class#Func#0" />
-                <element signature="method#dijReslove#0;class#Func#0" />
+                <element signature="class#CopyData#0" />
+                <element signature="e#3719#3720#0" expanded="true" />
+                <element signature="e#3743#3744#0" expanded="true" />
+                <element signature="e#3772#3773#0" expanded="true" />
+                <element signature="e#3798#3799#0" expanded="true" />
+                <element signature="e#3821#3822#0" expanded="true" />
+                <element signature="e#3845#3846#0" expanded="true" />
+                <element signature="e#3874#3875#0" expanded="true" />
+                <element signature="e#3900#3901#0" expanded="true" />
+                <element signature="method#equals#0;class#Pair#0" />
+                <element signature="method#hashCode#0;class#Pair#0" />
+                <element signature="class#Car#0" />
+                <element signature="e#7384#7385#0" expanded="true" />
+                <element signature="e#7412#7413#0" expanded="true" />
+                <element signature="e#30748#30749#0" expanded="true" />
+                <element signature="e#30784#30785#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk-11.0.1/lib/src.zip!/java.base/java/util/PriorityQueue.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10279">
-              <caret line="586" column="13" selection-start-line="586" selection-start-column="13" selection-end-line="586" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tempChannel</find>
-      <find>putNextTopPriorityCarIntoHashMap</find>
-      <find>getDirection</find>
-      <find>bRightConflict</find>
+      <find>runpr</find>
+      <find>allCarsNum</find>
+      <find>wrong</find>
       <find>getf</find>
-      <find>isfor</find>
+      <find>nowRoad</find>
+      <find>ispri</find>
+      <find>carNumInRoad</find>
+      <find>isfi</find>
+      <find>200</find>
+      <find>remove</find>
+      <find>isStart = 2</find>
+      <find>finish cars num</find>
+      <find>runpri</find>
+      <find>meth</find>
+      <find>priCars</find>
+      <find>init</find>
+      <find>presetroa</find>
+      <find>roadchoi</find>
+      <find>isfinish</find>
+      <find>error</find>
+      <find>getd</find>
+      <find>dre</find>
+      <find>runs</find>
+      <find>go</find>
+      <find>go back</find>
+      <find>mtime</find>
+      <find>dispCount</find>
+      <find>100</find>
+      <find>countMove</find>
+      <find>int</find>
     </findStrings>
+    <replaceStrings>
+      <replace>float</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -100,6 +163,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/main/java/com/huawei/MainOld.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huawei/Graph.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huawei/ForwordInfo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huawei/Car.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huawei/CarPos.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huawei/Cross.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huawei/Road.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huawei/DispContral.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huawei/Func.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huawei/Main.java" />
       </list>
@@ -123,7 +193,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -140,14 +209,14 @@
               <item name="CodeCraft-2019" type="b2602c69:ProjectViewProjectNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="huawei" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CodeCraft-2019" type="b2602c69:ProjectViewProjectNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="huawei" type="462c0819:PsiDirectoryNode" />
-              <item name="Main.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
             <path>
               <item name="CodeCraft-2019" type="b2602c69:ProjectViewProjectNode" />
@@ -159,12 +228,14 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554117964392" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554363532652" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../CodeCraft_code_recode_重构/code/CodeCraft-2019" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -188,11 +259,11 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.map1">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.huawei.Main" />
       <module name="main" />
-      <option name="PROGRAM_PARAMETERS" value="F:\伊凡\竞赛\华为软件挑战赛2019\初赛\data\1-map-exam-1\car.txt F:\伊凡\竞赛\华为软件挑战赛2019\初赛\data\1-map-exam-1\road.txt F:\伊凡\竞赛\华为软件挑战赛2019\初赛\data\1-map-exam-1\cross.txt F:\伊凡\竞赛\华为软件挑战赛2019\初赛\data\1-map-exam-1\result.txt" />
+      <option name="PROGRAM_PARAMETERS" value="F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\config\car.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\config\road.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\config\cross.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\config\presetAnswer.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\config\result.txt" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.huawei.*" />
@@ -203,6 +274,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="map1" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.huawei.Main" />
+      <module name="main" />
+      <option name="PROGRAM_PARAMETERS" value="F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-1\car.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-1\road.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-1\cross.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-1\presetAnswer.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-1\result.txt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="map2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.huawei.Main" />
+      <module name="main" />
+      <option name="PROGRAM_PARAMETERS" value="F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-2\car.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-2\road.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-2\cross.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-2\presetAnswer.txt F:\伊凡\竞赛\华为软件挑战赛2019\复赛\code\data\2-map-training-2\result.txt" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.map1" />
+      <item itemvalue="Application.map2" />
+      <item itemvalue="Application.Main" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
@@ -221,18 +313,25 @@
       <updated>1554106419769</updated>
       <workItem from="1554106422579" duration="4423000" />
       <workItem from="1554114499166" duration="3520000" />
-      <workItem from="1554120763592" duration="1796000" />
+      <workItem from="1554120763592" duration="5837000" />
+      <workItem from="1554186985911" duration="6423000" />
+      <workItem from="1554193935096" duration="10368000" />
+      <workItem from="1554258768423" duration="24132000" />
+      <workItem from="1554294586623" duration="4488000" />
+      <workItem from="1554299177356" duration="685000" />
+      <workItem from="1554344463194" duration="2619000" />
+      <workItem from="1554362741718" duration="611000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9739000" />
+    <option name="totallyTimeSpent" value="63106000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25670242" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28150135" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -240,17 +339,17 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32956153" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.34702548" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.398017" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.33002833" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.33002833" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.32956153" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.3286119" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -268,32 +367,203 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java</url>
+          <line>1362</line>
+          <properties />
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java</url>
+          <line>738</line>
+          <properties />
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java</url>
+          <line>1151</line>
+          <properties />
+          <option name="timeStamp" value="115" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java</url>
+          <line>1152</line>
+          <properties />
+          <option name="timeStamp" value="116" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java</url>
+          <line>1154</line>
+          <properties />
+          <option name="timeStamp" value="117" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java</url>
+          <line>1178</line>
+          <properties />
+          <option name="timeStamp" value="118" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java</url>
+          <line>1145</line>
+          <properties />
+          <option name="timeStamp" value="123" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java</url>
+          <line>1238</line>
+          <properties />
+          <option name="timeStamp" value="137" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java</url>
+          <line>141</line>
+          <properties />
+          <option name="timeStamp" value="138" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="topPriorityCar" language="JAVA" />
+        <watch expression="cross.crossRoads[3].roadID == topPriorityCar.roadChoiceList.get(topPriorityCar.presetRoadCount)" language="JAVA" />
+        <watch expression="cross.crossRoads[0] != null" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="breakpointCondition">
+      <expression>
+        <expression-string>cars.get(i).carID==8400</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cross.crossID==15</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>car.carID == 10215</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>car.carID == 10125</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>c\</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="watch">
+      <expression>
+        <expression-string>cross.crossRoads[3].roadID == topPriorityCar.roadChoiceList.get(topPriorityCar.presetRoadCount)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cross.crossRoads[2].roadID == topPriorityCar.roadChoiceList.get(topPriorityCar.presetRoadCount)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cross.crossRoads[1].roadID == topPriorityCar.roadChoiceList.get(topPriorityCar.presetRoadCount)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cross.crossRoads[0].roadID == topPriorityCar.roadChoiceList.get(topPriorityCar.presetRoadCount)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cross.crossRoads[i].roadID == roadChoiceList.get(presetRoadCount)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cross.crossRoads[0] != null</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cross.crossRoads[i] != null</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>topPriorityCar.getNxtChoice(func)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>topPriorityCar.getNxtChoice(func);</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>topPriorityCar</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
   <component name="editorHistoryManager">
+    <entry file="jar://C:/Program Files/Java/jdk-11.0.1/lib/src.zip!/java.base/java/util/PriorityQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10279">
+          <caret line="586" column="13" selection-start-line="586" selection-start-column="13" selection-end-line="586" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Cross.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Car.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Graph.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/CarPos.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/ForwordInfo.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Road.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/DispContral.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="361" column="42" selection-start-line="361" selection-start-column="42" selection-end-line="361" selection-end-column="42" />
+        <state relative-caret-position="-323">
+          <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
+          <folding>
+            <element signature="class#CopyData#0" />
+            <element signature="e#3719#3720#0" expanded="true" />
+            <element signature="e#3743#3744#0" expanded="true" />
+            <element signature="e#3772#3773#0" expanded="true" />
+            <element signature="e#3798#3799#0" expanded="true" />
+            <element signature="e#3821#3822#0" expanded="true" />
+            <element signature="e#3845#3846#0" expanded="true" />
+            <element signature="e#3874#3875#0" expanded="true" />
+            <element signature="e#3900#3901#0" expanded="true" />
+            <element signature="method#equals#0;class#Pair#0" />
+            <element signature="method#hashCode#0;class#Pair#0" />
+            <element signature="class#Car#0" />
+            <element signature="e#7384#7385#0" expanded="true" />
+            <element signature="e#7412#7413#0" expanded="true" />
+            <element signature="e#30748#30749#0" expanded="true" />
+            <element signature="e#30784#30785#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Func.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1083">
-          <caret line="376" column="51" selection-start-line="376" selection-start-column="51" selection-end-line="376" selection-end-column="51" />
+        <state relative-caret-position="152">
+          <caret line="78" column="120" selection-start-line="78" selection-start-column="120" selection-end-line="78" selection-end-column="120" />
           <folding>
             <element signature="method#readFile#0;class#Func#0" />
-            <element signature="method#copyData#0;class#Func#0" />
             <element signature="method#processData#0;class#Func#0" />
-            <element signature="method#writeFile#0;class#Func#0" />
             <element signature="method#dijReslove#0;class#Func#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-11.0.1/lib/src.zip!/java.base/java/util/PriorityQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10279">
-          <caret line="586" column="13" selection-start-line="586" selection-start-column="13" selection-end-line="586" selection-end-column="13" />
         </state>
       </provider>
     </entry>

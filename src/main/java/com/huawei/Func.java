@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class Func {
-    public void readFile( String carPath, String roadPath, String crossPath,ArrayList<int[]> carFileInfo, ArrayList<int[]> roadFileInfo, ArrayList<int[]> crossFileInfo) {
+    public void readFile(String carPath, String roadPath, String crossPath, ArrayList<int[]> carFileInfo, ArrayList<int[]> roadFileInfo, ArrayList<int[]> crossFileInfo) {
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(carPath));
@@ -76,19 +76,19 @@ public class Func {
     }
 
     //copy 主要数据
-    public CopyData copyData(ArrayList<Car> cars_in, ArrayList<Road> roads, ArrayList<Cross> crosses,
+    public CopyData copyData(ArrayList<Car> cars_in, ArrayList<Road> roads, ArrayList<Cross> crosses, ArrayList<Car> priCars,
                              HashMap<Integer, Road> roadHashMap, HashMap<Integer, Car> carHashMap,
                              HashMap<Integer, Cross> crossHashMap, int MTime, int carNumInRoad,
                              int carsNumLimit) {
         ArrayList<Car> cars_copy = new ArrayList<>();
         ArrayList<Road> roads_copy = new ArrayList<>();
         ArrayList<Cross> crosses_copy = new ArrayList<>();
+        ArrayList<Car> priCars_copy = new ArrayList<>();
         HashMap<Integer, Road> roadHashMap_copy = new HashMap<>();
         HashMap<Integer, Car> carHashMap_copy = new HashMap<>();
         HashMap<Integer, Cross> crossHashMap_copy = new HashMap<>();
 
         for (int i = 0; i < cars_in.size(); i++) {
-            //copy car
             Car car = cars_in.get(i).clone();
             cars_copy.add(car);
             carHashMap_copy.put(car.carID, car);
@@ -104,7 +104,9 @@ public class Func {
             crosses_copy.add(cross);
             crossHashMap_copy.put(cross.crossID, cross);
         }
-
+        for (int i = 0; i < priCars.size(); i++) {
+            priCars_copy.add(carHashMap_copy.get(priCars.get(i).carID));
+        }
         for (int i = 0; i < cars_copy.size(); i++) {
             Car car = cars_copy.get(i);
             car.nextRoad = car.nextRoad == null ? null : roadHashMap_copy.get(car.nextRoad.roadID);
@@ -164,6 +166,7 @@ public class Func {
         copyData.roads_copy = roads_copy;
         copyData.roadHashMap_copy = roadHashMap_copy;
         copyData.MTime = MTime;
+        copyData.priCars_copy = priCars_copy;
         copyData.carNumInRoad = carNumInRoad;
         copyData.carsNumLimit = carsNumLimit;
         return copyData;
@@ -175,7 +178,7 @@ public class Func {
                             HashMap<Integer, Road> roadHashMap, HashMap<Integer, Car> carHashMap, HashMap<Integer, Cross> crossHashMap) {
         for (int i = 0; i < carFileInfo.size(); i++) {
             cars_in.add(new Car(carFileInfo.get(i)[0], carFileInfo.get(i)[1], carFileInfo.get(i)[2],
-                    carFileInfo.get(i)[3], carFileInfo.get(i)[4],carFileInfo.get(i)[5],carFileInfo.get(i)[6]));
+                    carFileInfo.get(i)[3], carFileInfo.get(i)[4], carFileInfo.get(i)[5], carFileInfo.get(i)[6]));
         }
 
         //#(id,length,speed,channel,from,to,isDuplex)
@@ -268,11 +271,11 @@ public class Func {
     }
 
     public void writeFile(ArrayList<Car> cars_out, String answerPath) {
-        // 将car中的roadchoicelist输出answer.txt
-
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(answerPath));
             for (Car car : cars_out) {
+                if (car.isPresetCar)
+                    continue;
                 String road = "";
                 for (int i = 0; i < car.roadChoiceList.size(); i++) {
                     road = road + ", " + car.roadChoiceList.get(i);
@@ -290,7 +293,7 @@ public class Func {
     }
 
     public boolean allCarFinished(ArrayList<Car> cars) {
-        for (Car car:cars){
+        for (Car car : cars) {
             if (!car.isFinish) return false;
         }
         return true;
@@ -298,9 +301,10 @@ public class Func {
 
     /**
      * 在用邻接矩阵adjMat表示的图中，求解从点s到点t的最短路径
+     *
      * @param adjMat 邻接矩阵
-     * @param s 起点
-     * @param t 终点
+     * @param s      起点
+     * @param t      终点
      * @param
      * @return
      */
@@ -308,7 +312,7 @@ public class Func {
 
         int IMAX = 0x3f3f3f3f;
         //判断参数是否正确
-        if(s < 0 || t < 0 || s >=adjMat.length || t >= adjMat.length) {
+        if (s < 0 || t < 0 || s >= adjMat.length || t >= adjMat.length) {
             System.out.println("错误，顶点不在图中!");
             return IMAX;
         }
@@ -319,7 +323,7 @@ public class Func {
         float[] d = new float[adjMat.length];
 
         //初始化数据
-        for(int i=0;i<adjMat.length;i++) {
+        for (int i = 0; i < adjMat.length; i++) {
             isVisited[i] = false;
             d[i] = IMAX;
         }
@@ -330,25 +334,25 @@ public class Func {
         int unVisitedNum = adjMat.length;
         //用于表示当前所保存的子路径中权重最小的顶点的索引,对应优先队列中,默认是起点
         int index = s;
-        while(unVisitedNum > 0 && index != t) {
+        while (unVisitedNum > 0 && index != t) {
             float min = IMAX;
-            for(int i=0;i<adjMat.length;i++) { //取到第i行的最小元素的索引
-                if(min > d[i] && !isVisited[i]) {
+            for (int i = 0; i < adjMat.length; i++) { //取到第i行的最小元素的索引
+                if (min > d[i] && !isVisited[i]) {
                     min = d[i];
                     index = i;
                 }
             }
-            if(index == t || unVisitedNum == 0) {
+            if (index == t || unVisitedNum == 0) {
                 //System.out.print(index); //打印最短路径
             } else {
                 //System.out.print(index + "=>"); //打印最短路径
             }
-            for(int i=0;i<adjMat.length;i++) {
-                if(d[index] + adjMat[index][i] < d[i]) {
+            for (int i = 0; i < adjMat.length; i++) {
+                if (d[index] + adjMat[index][i] < d[i]) {
                     d[i] = d[index] + adjMat[index][i];
                 }
             }
-            unVisitedNum --;
+            unVisitedNum--;
             isVisited[index] = true;
         }
         return d[t];
