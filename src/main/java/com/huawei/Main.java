@@ -13,22 +13,17 @@ public class Main {
             return;
         }
         logger.info("Start...");
-
         String carPath = args[0];
         String roadPath = args[1];
         String crossPath = args[2];
         String presetAnswerPath = args[3];
         String answerPath = args[4];
-
         logger.info("carPath = " + carPath + " roadPath = " + roadPath + " crossPath = " + crossPath + " presetAnswerPath = " + presetAnswerPath + " and answerPath = " + answerPath);
-
         logger.info("start read input files");
-
         /**
          * 读取文件
          */
         ArrayList<Car> cars = new ArrayList<>(); //
-
         ArrayList<Road> roads = new ArrayList<>();
         ArrayList<Cross> crosses = new ArrayList<>();
         HashMap<Integer, Road> roadHashMap = new HashMap<>();
@@ -46,19 +41,18 @@ public class Main {
 
         Func func = new Func();
         func.readFile(carPath, roadPath, crossPath, carFileInfo, roadFileInfo, crossFileInfo);
-
         //处理输入数据到类
         func.processData(carFileInfo, roadFileInfo, crossFileInfo, cars, roads, crosses, roadHashMap, carHashMap, crossHashMap);
-
         //处理预置车辆的choicelist。
         func.processPresetCar(carHashMap, presetAnswerPath);
+
         double alpha = 0;
         float priMinPlanTime = 0x3f3f3f3f;
         for (int i = 0; i < cars.size(); i++) {
-            if (cars.get(i).isPriorityCar && priMinPlanTime > cars.get(i).minStartTime) priMinPlanTime = cars.get(i).minStartTime;
+            if (cars.get(i).isPriorityCar && priMinPlanTime > cars.get(i).backupStartTime)
+                priMinPlanTime = cars.get(i).backupStartTime;
         }
         alpha = getAlpha(cars);
-
 
 
         DispatchCenter dispatchCenter = new DispatchCenter(func, cars, roads, crosses, roadHashMap, carHashMap, crossHashMap);
@@ -88,15 +82,15 @@ public class Main {
         }
 
 
-        int score = 0;
-        score = getScore(dispatchCenter.cars,dispatchCenter.MTime,priMinPlanTime,alpha);
+        double score = 0;
+        score = getScore(dispatchCenter.cars, dispatchCenter.MTime, priMinPlanTime, alpha);
         System.out.println("score:" + score);
         func.writeFile(dispatchCenter.cars, answerPath);
     }
 
 
-    public  static double getAlpha(ArrayList<Car> cars) {
-        double alpha=0;
+    public static double getAlpha(ArrayList<Car> cars) {
+        double alpha = 0;
         float pricarNum = 0;
         float carNum = 0;
         float pricarmaxSpeed = 0;
@@ -119,16 +113,16 @@ public class Main {
             carScountHashSet.add(car.startCrossID);
             carEcountHashSet.add(car.endCrossID);
             carNum++;
-            if (car.maxSpeedofCar>carmaxSpeed)carmaxSpeed = car.maxSpeedofCar;
+            if (car.maxSpeedofCar > carmaxSpeed) carmaxSpeed = car.maxSpeedofCar;
             if (car.maxSpeedofCar < carminSpeed) carminSpeed = car.maxSpeedofCar;
-            if (car.minStartTime>carmaxSTime)carmaxSTime = car.minStartTime;
-            if (car.minStartTime < carminSTime) carminSTime = car.minStartTime;
-            if (car.isPriorityCar){
+            if (car.backupStartTime > carmaxSTime) carmaxSTime = car.backupStartTime;
+            if (car.backupStartTime < carminSTime) carminSTime = car.backupStartTime;
+            if (car.isPriorityCar) {
                 pricarNum++;
-                if (car.maxSpeedofCar>pricarmaxSpeed)pricarmaxSpeed = car.maxSpeedofCar;
+                if (car.maxSpeedofCar > pricarmaxSpeed) pricarmaxSpeed = car.maxSpeedofCar;
                 if (car.maxSpeedofCar < pricarminSpeed) pricarminSpeed = car.maxSpeedofCar;
-                if (car.minStartTime>pricarmaxSTime)pricarmaxSTime = car.minStartTime;
-                if (car.minStartTime < pricarminSTime) pricarminSTime = car.minStartTime;
+                if (car.backupStartTime > pricarmaxSTime) pricarmaxSTime = car.backupStartTime;
+                if (car.backupStartTime < pricarminSTime) pricarminSTime = car.backupStartTime;
                 pricarScountHashSet.add(car.startCrossID);
                 pricarEcountHashSet.add(car.endCrossID);
             }
@@ -137,20 +131,20 @@ public class Main {
         carScount = carScountHashSet.size();
         pricarEcount = pricarEcountHashSet.size();
         carEcount = carEcountHashSet.size();
-        alpha = 0.05*carNum/pricarNum + 0.2375*(carmaxSpeed/carminSpeed)/(pricarmaxSpeed/pricarminSpeed)
-                + 0.2375*(carEcount)/(pricarEcount) + 0.2375*(carScount)/(pricarScount) + 0.2375*(carmaxSTime/carminSTime)/(pricarmaxSTime/pricarminSTime);
+        alpha = 0.05 * carNum / pricarNum + 0.2375 * (carmaxSpeed / carminSpeed) / (pricarmaxSpeed / pricarminSpeed)
+                + 0.2375 * (carEcount) / (pricarEcount) + 0.2375 * (carScount) / (pricarScount) + 0.2375 * (carmaxSTime / carminSTime) / (pricarmaxSTime / pricarminSTime);
         return alpha;
     }
 
-    private static int getScore(ArrayList<Car> cars, int MTime,float PriminPlanTime,double alpha) {
-        int score = 0;
+    private static double getScore(ArrayList<Car> cars, int MTime, float PriminPlanTime, double alpha) {
+        double score = 0;
         float maxPlanTime = 0;
         for (Car car : cars) {
-            if (car.isPriorityCar){
+            if (car.isPriorityCar) {
                 if (maxPlanTime < car.maxTimeCount) maxPlanTime = car.maxTimeCount;
             }
         }
-        score = (int) (alpha*(maxPlanTime-PriminPlanTime) + MTime);
+        score = alpha * (maxPlanTime - PriminPlanTime) + (double) MTime - 1;
         return score;
 
     }
@@ -161,7 +155,6 @@ class CopyData {
     ArrayList<Car> cars_copy;
     ArrayList<Road> roads_copy;
     ArrayList<Cross> crosses_copy;
-    ArrayList<Car> priCars_copy;
     HashMap<Integer, Road> roadHashMap_copy;
     HashMap<Integer, Car> carHashMap_copy;
     HashMap<Integer, Cross> crossHashMap_copy;
@@ -236,6 +229,7 @@ class Car implements Cloneable, Comparable<Car> {
     public static final int GO_NEVER = 3;
     public static final int END_STATUS = 0;
     public static final int WAIT_STATUS = 1;
+    public static final int NO_STATUS = -1;
     public static final int FORWORD_HAS_NO_CAR = 0;
     public static final int FORWORD_HAS_END_CAR = 1;
     public static final int FORWORD_HAS_WAIT_CAR = 2;
@@ -256,6 +250,7 @@ class Car implements Cloneable, Comparable<Car> {
     int minStartTime;
     int minTimeCount;
     int maxTimeCount;
+    int backupStartTime;
 
     public Car clone() {
         try {
@@ -343,6 +338,7 @@ class Car implements Cloneable, Comparable<Car> {
         this.isPresetCar = preset == 1;
         this.kasi = false;
         this.presetRoadCount = 0;
+        this.backupStartTime = planTime;
     }
 
     int getRealSpeedOnNowRoad() {
@@ -365,6 +361,7 @@ class Car implements Cloneable, Comparable<Car> {
 
     int getDirection() {
         Cross cross;
+
         if (isForward)
             cross = nowRoad.toCross;
         else
@@ -379,7 +376,9 @@ class Car implements Cloneable, Comparable<Car> {
         if (isPresetCar && cross.crossID == endCrossID && presetRoadCount == roadChoiceList.size()) {
             return GO_DOWN;
         }
-
+        if (nextRoad==null){
+            System.out.println("error");
+        }
         int nowRoadOrder, nextRoadOrder;
         for (nowRoadOrder = 0; nowRoadOrder < 4; nowRoadOrder++) {
             if (cross.crossRoads[nowRoadOrder] == nowRoad)
@@ -493,13 +492,13 @@ class Car implements Cloneable, Comparable<Car> {
         boolean bConflict = false;
         if (leftRoad != null && crossRoadHash.get(new Pair<>(cross.crossID, leftRoad.roadID)).size() != 0) {
             Car conflictCar = crossRoadHash.get(new Pair<>(cross.crossID, leftRoad.roadID)).peek();
-            if (conflictCar != null && conflictCar.isPriorityCar) {
+            if (conflictCar != null && conflictCar.isPriorityCar && conflictCar.getDirection() == GO_LEFT) {
                 bConflict = true;
             }
         }
         if (rightRoad != null && crossRoadHash.get(new Pair<>(cross.crossID, rightRoad.roadID)).size() != 0) {
             Car conflictCar = crossRoadHash.get(new Pair<>(cross.crossID, rightRoad.roadID)).peek();
-            if (conflictCar != null && conflictCar.isPriorityCar) {
+            if (conflictCar != null && conflictCar.isPriorityCar && conflictCar.getDirection() == GO_RIGHT) {
                 bConflict = true;
             }
         }
@@ -513,7 +512,7 @@ class Car implements Cloneable, Comparable<Car> {
      */
     Random random = new Random(4050);
 
-    public void getNxtChoice(Func func) {
+    public void getNxtChoice(Func func,int carNumInRoad) {
         // 判断是否轮得到这辆车选择下一个路口，如果轮到了，进行选择，没有轮到，return；
         Cross cross;
         if (isForward)
@@ -522,14 +521,19 @@ class Car implements Cloneable, Comparable<Car> {
             cross = nowRoad.fromCross;
 
         //预置车辆得到下一条路。
+        if (nextRoad != null) return;
         if (isPresetCar) {
+            if (roadChoiceList.size() == presetRoadCount) return;
             if (nextRoad == null && getTypeOfForwordCar().forwardStatus == Car.FORWORD_NEED_THROUGH_CROSS) {
                 for (int i = 0; i < 4; i++) {
+
                     if (cross.crossRoads[i] != null && cross.crossRoads[i].roadID == roadChoiceList.get(presetRoadCount)) { //道路不为空而且是那条路
                         nextRoad = cross.crossRoads[i];
                         presetRoadCount++;
                         return;
                     }
+
+
                 }
             }
             return;
@@ -538,7 +542,9 @@ class Car implements Cloneable, Comparable<Car> {
 
         if (nextRoad == null && getTypeOfForwordCar().forwardStatus == Car.FORWORD_NEED_THROUGH_CROSS) {
             //随机选路法（仅限于卡死情况）
-            if (kasi || random.nextInt(100) % 35 == 0) {
+            int yu = 35;
+            if (carNumInRoad > 4000) yu = 30;
+            if (kasi || random.nextInt(100) % yu == 0) {
                 //随机选择这个cross的下个路，然后break出当前路。双向车道都要选择。
                 //kasi =  random.nextInt(100) % 5 == 0?true:false;
                 kasi = false;
@@ -560,7 +566,7 @@ class Car implements Cloneable, Comparable<Car> {
                     if (cross.crossRoads[i].isDuplex) {
                         if (cross.crossRoads[i].toCross.crossID == cross.crossID) {
 
-                            float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(cross.crossRoads[i].fromCross.crossID), graphMapCross.get(endCrossID));
+                            float tmp = func.dijReslove(graph.graphGlobal, graphMapCross.get(cross.crossRoads[i].fromCross.crossID), graphMapCross.get(endCrossID));
                             float len = cross.crossRoads[i].roadLength;
                             float speed = Math.min(maxSpeedofCar, cross.crossRoads[i].speedLimitofRoad);
                             tmp += len / speed;
@@ -585,7 +591,7 @@ class Car implements Cloneable, Comparable<Car> {
                                 score = tmp;
                             }
                         } else if (cross.crossRoads[i].fromCross.crossID == cross.crossID) {
-                            float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(cross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
+                            float tmp = func.dijReslove(graph.graphGlobal, graphMapCross.get(cross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
                             float len = cross.crossRoads[i].roadLength;
                             float speed = Math.min(maxSpeedofCar, cross.crossRoads[i].speedLimitofRoad);
                             tmp += len / speed;
@@ -612,7 +618,7 @@ class Car implements Cloneable, Comparable<Car> {
                         }
                     } else if (!cross.crossRoads[i].isDuplex) {
                         if (cross.crossRoads[i].fromCross.crossID == cross.crossID) {
-                            float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(cross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
+                            float tmp = func.dijReslove(graph.graphGlobal, graphMapCross.get(cross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
                             float len = cross.crossRoads[i].roadLength;
                             float speed = Math.min(maxSpeedofCar, cross.crossRoads[i].speedLimitofRoad);
                             tmp += len / speed;
@@ -646,6 +652,7 @@ class Car implements Cloneable, Comparable<Car> {
     //首次出发得到第一条路
     public void getFistChoice(Func func) {
         //如果是预置车辆
+        if (nextRoad != null) return;
         if (isPresetCar) {
             for (int i = 0; i < 4; i++) {
                 if (startCross.crossRoads[i] != null && startCross.crossRoads[i].roadID == roadChoiceList.get(presetRoadCount)) { //道路不为空而且为所在的道路
@@ -658,6 +665,7 @@ class Car implements Cloneable, Comparable<Car> {
                         isForward = false;
                     }
                     presetRoadCount++;
+                    break;
                 }
             }
         } else {
@@ -669,11 +677,11 @@ class Car implements Cloneable, Comparable<Car> {
                     // 双车道时，起点或者终点为所选的第二个节点即可，单车道道时必须时终点为第二个节点。
                     if (startCross.crossRoads[i].isDuplex) {
                         if (startCross.crossID == startCross.crossRoads[i].toCross.crossID) {
-                            float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(startCross.crossRoads[i].fromCross.crossID), graphMapCross.get(endCrossID));
+                            float tmp = func.dijReslove(graph.graphGlobal, graphMapCross.get(startCross.crossRoads[i].fromCross.crossID), graphMapCross.get(endCrossID));
                             float len = startCross.crossRoads[i].roadLength;
                             float speed = Math.min(maxSpeedofCar, startCross.crossRoads[i].speedLimitofRoad);
                             tmp += len / speed;
-
+                            tmp = tmp * (1 + startCross.crossRoads[i].getCarNumRate(startCross));
                             if (tmp < score) {
                                 nowRoad = startCross.crossRoads[i];
                                 nextRoad = null;//ccg开始上路，nextroad为null
@@ -681,11 +689,11 @@ class Car implements Cloneable, Comparable<Car> {
                                 score = tmp;
                             }
                         } else if (startCross.crossID == startCross.crossRoads[i].fromCross.crossID) {
-                            float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(startCross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
+                            float tmp = func.dijReslove(graph.graphGlobal, graphMapCross.get(startCross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
                             float len = startCross.crossRoads[i].roadLength;
                             float speed = Math.min(maxSpeedofCar, startCross.crossRoads[i].speedLimitofRoad);
                             tmp += len / speed;
-
+                            tmp = tmp * (1 + startCross.crossRoads[i].getCarNumRate(startCross));
                             if (tmp < score) {
                                 nowRoad = startCross.crossRoads[i];
                                 nextRoad = null;//ccg开始上路，nextroad为null
@@ -695,11 +703,11 @@ class Car implements Cloneable, Comparable<Car> {
                         }
                     } else if (!startCross.crossRoads[i].isDuplex) {
                         if (startCross.crossID == startCross.crossRoads[i].fromCross.crossID) {
-                            float tmp = func.dijReslove(graph.graphGlobal[0], graphMapCross.get(startCross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
+                            float tmp = func.dijReslove(graph.graphGlobal, graphMapCross.get(startCross.crossRoads[i].toCross.crossID), graphMapCross.get(endCrossID));
                             float len = startCross.crossRoads[i].roadLength;
                             float speed = Math.min(maxSpeedofCar, startCross.crossRoads[i].speedLimitofRoad);
                             tmp += len / speed;
-
+                            tmp = tmp * (1 + startCross.crossRoads[i].getCarNumRate(startCross));
                             if (tmp < score) {
                                 nowRoad = startCross.crossRoads[i];
                                 nextRoad = null;//ccg开始上路，nextroad为null。nextRoad = startCross.crossRoads[i];改
@@ -799,7 +807,6 @@ class Road implements Cloneable {
     boolean isDuplex;// 是否是单双道
     //该道路from->to上的车辆ID。按照选路优先级排列。//int[roadLength][channelCount],
     Car[][] carOnRoad;
-
     //该道路双车道to->from上的车辆ID。按照选路优先级排列。//int[roadLength][channelCount],
     Car[][] carOnDuplexRoad;
 
@@ -868,7 +875,7 @@ class Road implements Cloneable {
 }
 
 class Graph {
-    float[][][] graphGlobal;
+    float[][][] graphGlobal; //第一维分别为距离，速度，路况拥挤
     HashMap<Integer, Integer> graphMapCross; //实际CrossID映射路网0123456...的ID
     HashMap<Integer, Integer> crossMapgraph; //0123...映射路网crossID
 }
@@ -944,7 +951,7 @@ class CarPos {
 class DispatchCenter {
     int countMove = 0;
     int carNumInRoad;
-    int carsNumLimit = 100;
+    int carsNumLimit = 1000;
     int backTime;
     int MTime;
     HashSet<Integer> carOnRoadHash;
@@ -970,12 +977,15 @@ class DispatchCenter {
         this.carHashMap = carHashMap;
         this.roadHashMap = roadHashMap;
         this.carOnRoadHash = new HashSet<>();
-        this.priCars = new ArrayList<>();
     }
 
     public boolean DispatchOneTimePiece() {
+        //新时间片更新路网矩阵，进行负载均衡
+        updateGraph();
         methodCholce();
         markAllCars();
+        //路上车进行集中选路
+        //nextRoadChoiceOnRoad();
         if (dispatchWaitCar()) {
             backTime--;
             runStartCar();
@@ -987,19 +997,51 @@ class DispatchCenter {
         return false;
     }
 
-    private void methodCholce() {
-        for (int i = 0; i < cars.size(); i++) {
-            if (cars.get(i).isPresetCar && !cars.get(i).isFinish) {
-                carsNumLimit = 0;
-                return;
+    private void updateGraph() {
+        Graph graph = cars.get(0).graph;
+        //更新路网路口
+        for (int j = 0; j < roads.size(); j++) {
+            Road road = roads.get(j);
+            float rate = road.getCarNumRate(road.fromCross);
+            graph.graphGlobal[2][graph.graphMapCross.get(roads.get(j).fromCross.crossID)]
+                    [graph.graphMapCross.get(roads.get(j).toCross.crossID)] = rate;
+
+            if (roads.get(j).isDuplex) {
+                graph.graphGlobal[2][graph.graphMapCross.get(roads.get(j).toCross.crossID)]
+                        [graph.graphMapCross.get(roads.get(j).fromCross.crossID)] = rate;
+
             }
         }
-        carsNumLimit = 500;
+
+    }
+
+    private void nextRoadChoiceOnRoad() {
+        for (int i = 0; i < cars.size(); i++) {
+            Car car = cars.get(i);
+            if (!car.isFinish && car.isStart == Car.GONE){
+                car.getNxtChoice(func,carNumInRoad);
+            }
+        }
+    }
+
+    private void methodCholce() {
+        //路上车辆控制逻辑
+        if (carNumInRoad < 2000) carsNumLimit=2000;
+        carsNumLimit+=20;
+        if (carNumInRoad > 4500) carsNumLimit=4500;
+//        for (int i = 0; i < cars.size(); i++) {
+//            if (cars.get(i).isPresetCar && !cars.get(i).isFinish) {
+//                if (carNumInRoad<2500) carsNumLimit=2500;
+//                else
+//                    carsNumLimit = 1000;
+//                return;
+//            }
+//        }
+        //carsNumLimit = 3000;
     }
 
     public void dispatchGoBack(CopyData originCopyData) {
-        CopyData copyData = func.copyData(originCopyData.cars_copy, originCopyData.roads_copy, originCopyData.crosses_copy,
-                originCopyData.priCars_copy, originCopyData.roadHashMap_copy, originCopyData.carHashMap_copy,
+        CopyData copyData = func.copyData(originCopyData.cars_copy, originCopyData.roads_copy, originCopyData.crosses_copy, originCopyData.roadHashMap_copy, originCopyData.carHashMap_copy,
                 originCopyData.crossHashMap_copy, originCopyData.MTime, originCopyData.carNumInRoad, originCopyData.carsNumLimit);
         this.MTime = copyData.MTime;
         this.carNumInRoad = copyData.carNumInRoad;
@@ -1015,15 +1057,14 @@ class DispatchCenter {
         this.crossHashMap = copyData.crossHashMap_copy;
         this.carHashMap = copyData.carHashMap_copy;
         this.roadHashMap = copyData.roadHashMap_copy;
-        this.priCars = copyData.priCars_copy;
         if (backTime <= 0) {
-            this.carsNumLimit = (int) (copyData.carsNumLimit * 0.9668);
+            this.carsNumLimit = (int) (copyData.carsNumLimit-500);
             backTime = 5;
         }
     }
 
     public CopyData CopyDispatchTimePieceData() {
-        return func.copyData(cars, roads, crosses, priCars, roadHashMap, carHashMap, crossHashMap, MTime,
+        return func.copyData(cars, roads, crosses, roadHashMap, carHashMap, crossHashMap, MTime,
                 carNumInRoad, carsNumLimit);
     }
 
@@ -1078,12 +1119,16 @@ class DispatchCenter {
                 for (int channel = 0; channel < road.channelCount; channel++) {
                     for (int offset = 0; offset < road.roadLength; offset++) {
                         if (carRoad[channel][offset] != null && carRoad[channel][offset].flag == Car.WAIT_STATUS) {
+                            //TODO：初始化选路
                             theTopPriorityCars.add(carRoad[channel][offset]);
                             isNowCrossNeedDispatch = true;
                             break;
                         }
                     }
                 }
+                if (theTopPriorityCars.peek() != null)
+                    theTopPriorityCars.peek().getNxtChoice(func,carNumInRoad);
+
                 crossRoadMap.put(new Pair<>(cross.crossID, road.roadID), theTopPriorityCars);
             }
         }
@@ -1104,6 +1149,7 @@ class DispatchCenter {
         PriorityQueue<Car> priorityCar = crossRoadMap.get(new Pair<>(cross.crossID, road.roadID));
         for (int length = lastCarOffset; length < road.roadLength; ++length) {
             if (carRoad[lastCarChannel][length] != null && carRoad[lastCarChannel][length].flag == Car.WAIT_STATUS) {
+                //TODO：初始化选路
                 priorityCar.add(carRoad[lastCarChannel][length]);
                 return true;
             }
@@ -1117,15 +1163,16 @@ class DispatchCenter {
      * dispatchWaitCar()
      */
     private boolean dispatchWaitCar() {
+        driveAllStartPriorityCars();
         if (crosses.size() == 0)
             return true;
         HashMap<Integer, Boolean> crossMap = new HashMap<>();
         HashMap<Pair<Integer, Integer>, PriorityQueue<Car>> crossRoadMap = new HashMap<>();
         for (Cross cross : crosses)
             crossMap.put(cross.crossID, !initialCrossRoadMap(cross, crossRoadMap));
-        driveAllStartPriorityCars();
+
         while (true) {
-            boolean bAllCrossesDispatch = true;
+            boolean bAllCrossesDispatch = false;
             countMove = 0;
             for (Cross cross : crosses) {
                 if (crossMap.get(cross.crossID)) {//该路口调度结束
@@ -1139,11 +1186,14 @@ class DispatchCenter {
                     //如果是单向道，该出路口没有车道（这里在initialCrossRoadMap()函数已经考虑到了，自然时调度结束true）
                     if (carRoad == null)
                         continue;
-                    int tempChannel, tempOffset;
+
                     while (crossRoadMap.get(new Pair<>(cross.crossID, road.roadID)).peek() != null) {
+                        int tempChannel, tempOffset;
+                        boolean tempForward;
                         Car topPriorityCar = crossRoadMap.get(new Pair<>(cross.crossID, road.roadID)).peek();//寻找到该车道第一优先级的第一辆车
                         tempChannel = topPriorityCar.nowRoadChannel;//保留topCar的初始位置channel信息
                         tempOffset = topPriorityCar.roadOffset;//保留topCar的初始位置offset信息
+                        tempForward = topPriorityCar.isForward;
                         ForwordInfo forwordInfo = topPriorityCar.getTypeOfForwordCar();
                         if (forwordInfo.forwardStatus == Car.FORWORD_NEED_THROUGH_CROSS) {
                             if ((cross.crossID == topPriorityCar.endCrossID && !topPriorityCar.isPresetCar) ||
@@ -1164,22 +1214,17 @@ class DispatchCenter {
                                 carOnRoadHash.remove(topPriorityCar.carID);
                                 countMove++;
                             } else {
-                                topPriorityCar.getNxtChoice(func);
+                                topPriorityCar.getNxtChoice(func,carNumInRoad);
                                 if (!topPriorityCar.getDirectionResult(crossRoadMap)) {//发生了冲突
                                     break;
                                 }
-                                try {
-                                    int stepCounts = Math.min(topPriorityCar.maxSpeedofCar, topPriorityCar.nextRoad.speedLimitofRoad) - topPriorityCar.roadOffset;
-                                    stepCounts = stepCounts > 0 ? stepCounts : 0;
-                                    if (!setCarStatusWhenThroughCross(topPriorityCar, cross, stepCounts))
-                                        break;
-                                    else
-                                        crossRoadMap.get(new Pair<>(cross.crossID, road.roadID)).poll();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                int stepCounts = Math.min(topPriorityCar.maxSpeedofCar, topPriorityCar.nextRoad.speedLimitofRoad) - topPriorityCar.roadOffset;
+                                stepCounts = stepCounts > 0 ? stepCounts : 0;
+                                if (!setCarStatusWhenThroughCross(topPriorityCar, cross, stepCounts))
+                                    break;
+                                else
+                                    crossRoadMap.get(new Pair<>(cross.crossID, road.roadID)).poll();
                             }
-                            //dispatch this channel，前车变成了终止状态，更新这条车道上的后续车辆
                             int offset = tempOffset + 1;
                             for (; offset < road.roadLength; ++offset) {
                                 if (carRoad[tempChannel][offset] == null)
@@ -1201,8 +1246,12 @@ class DispatchCenter {
                                     }
                                 }
                             }
+                            putNextTopPriorityCarIntoHashMap(cross, road, carRoad, tempChannel, tempOffset, crossRoadMap);
+                            //driveAllStartPriorityCars();
+                            driveSingleStartPriorityCars(road,tempForward);
+                        } else {
+                            System.out.println("error");
                         }
-                        putNextTopPriorityCarIntoHashMap(cross, road, carRoad, tempChannel, tempOffset, crossRoadMap);
                     }
                 }//end for sorted roads
                 int flag = 1;
@@ -1221,22 +1270,27 @@ class DispatchCenter {
                 if (!crossMap.get(crosstmp.crossID)) {
                     bAllCrossesDispatch = false;
                     break;
+                }else {
+                    bAllCrossesDispatch = true;
                 }
             }
             if (bAllCrossesDispatch) {
-                for (int i = 0; i < priCars.size(); i++) {
-                    Car pricar = priCars.get(i);
-                    if (pricar.isStart == 1) {
-                        pricar.isStart = 0;
-                        pricar.minStartTime++;
-                        pricar.realStartTime++;
-                    }
-                }
                 return true;
             }
-            if (countMove == 0) {
-                System.out.println("go back");
+            if (countMove == 0 && carNumInRoad!=0) {
+                //System.out.println("go back");
                 return false;
+            }
+        }
+    }
+
+    private void driveSingleStartPriorityCars(Road road, boolean tempForward) {
+        Iterator<Car> iterator = priCars.iterator();
+        while (iterator.hasNext()) {
+            Car car = iterator.next();
+            if (car.nowRoad.roadID == road.roadID && car.isStart == 1 && car.isForward==tempForward) {
+                if (runPriStartCar(car))
+                    iterator.remove();
             }
         }
     }
@@ -1383,24 +1437,24 @@ class DispatchCenter {
         int thisCarStartNum = 0;
         priCars = new ArrayList<>();
         for (Car car : cars) {
-            if (car.isStart == 2 && !car.isFinish)
-                car.flag = Car.WAIT_STATUS;
+            if (car.isStart == Car.GONE && !car.isFinish)
+                car.flag = Car.NO_STATUS;
             if (!car.isFinish && car.isStart == Car.NO_GO && car.minStartTime == MTime && car.isPriorityCar) {
                 if (carNumInRoad + thisCarStartNum < carsNumLimit || car.isPresetCar) {
                     car.isStart = Car.GOING;
-                    car.startCross = crossHashMap.get(car.startCrossID);
-                    car.endCross = crossHashMap.get(car.endCrossID);
                     car.getFistChoice(func);
+                    car.minStartTime = MTime;
+                    car.realStartTime = MTime;
                     priCars.add(car);
                     thisCarStartNum++;
                 } else {
                     car.minStartTime++;
+                    car.realStartTime++;
                 }
             }
         }
         for (Road road : roads) {
-            Car[][] carOnRoad = road.carOnRoad;
-            Car[][] carOnDuplexRoad = road.carOnDuplexRoad;
+
             for (int eachChannel = 0; eachChannel < road.channelCount; eachChannel++) {
                 for (int eachOffset = 0; eachOffset < road.roadLength; eachOffset++) {
                     markCar(road.carOnRoad[eachChannel][eachOffset]);
@@ -1453,14 +1507,12 @@ class DispatchCenter {
         }
     }
 
-    /*
-     * 该函数作用：运行非优先级出发车辆，该车辆被置为出发标记，且nowroad被正确设定。偏移量被设定为nowroad的长度。
-     * */
     public void runStartCar() {
         driveAllStartPriorityCars();
         for (Car car : priCars) {
             car.isStart = 0;
             car.minStartTime++;
+            car.realStartTime++;
         }
         ArrayList<Car> limitSpeed = new ArrayList<>();
         for (int i = 0; i < cars.size(); i++) {
@@ -1478,13 +1530,12 @@ class DispatchCenter {
             }
         });
         int thisTimeStartCarNum = carsNumLimit - carNumInRoad;
-        //预置车辆上路
+        //预置车辆上路(非优先车辆)
         for (int i = 0; i < cars.size(); i++) {
-            if (cars.get(i).isPresetCar && cars.get(i).minStartTime == MTime && cars.get(i).isStart == 0) {
+            if (cars.get(i).isPresetCar && cars.get(i).minStartTime == MTime && cars.get(i).isStart == 0 && !cars.get(i).isPriorityCar) {
                 cars.get(i).isStart = 1; // 上路出发
+                cars.get(i).minStartTime = MTime;
                 cars.get(i).realStartTime = MTime;
-                cars.get(i).startCross = crossHashMap.get(cars.get(i).startCrossID);
-                cars.get(i).endCross = crossHashMap.get(cars.get(i).endCrossID);
                 cars.get(i).getFistChoice(func);
                 thisTimeStartCarNum--;
             }
@@ -1496,8 +1547,6 @@ class DispatchCenter {
                     break;
                 limitSpeed.get(0).isStart = 1; // 上路出发
                 limitSpeed.get(0).realStartTime = MTime;
-                limitSpeed.get(0).startCross = crossHashMap.get(limitSpeed.get(0).startCrossID);
-                limitSpeed.get(0).endCross = crossHashMap.get(limitSpeed.get(0).endCrossID);
                 limitSpeed.get(0).getFistChoice(func);//得到首次的选择，并更新car信息
                 limitSpeed.remove(0);
                 thisTimeStartCarNum--;
@@ -1505,6 +1554,7 @@ class DispatchCenter {
         }
         for (Car car : limitSpeed) {
             car.minStartTime++;
+            car.realStartTime++;
         }
         for (Car car : cars) {
             if (car.isStart == 1 && !car.isFinish) {
@@ -1528,6 +1578,7 @@ class DispatchCenter {
                 if (car.isStart == 1) {
                     car.isStart = 0;
                     car.minStartTime++;
+                    car.realStartTime++;
                 }
             }
         }

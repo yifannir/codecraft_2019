@@ -76,7 +76,7 @@ public class Func {
     }
 
     //copy 主要数据
-    public CopyData copyData(ArrayList<Car> cars_in, ArrayList<Road> roads, ArrayList<Cross> crosses, ArrayList<Car> priCars,
+    public CopyData copyData(ArrayList<Car> cars_in, ArrayList<Road> roads, ArrayList<Cross> crosses,
                              HashMap<Integer, Road> roadHashMap, HashMap<Integer, Car> carHashMap,
                              HashMap<Integer, Cross> crossHashMap, int MTime, int carNumInRoad,
                              int carsNumLimit) {
@@ -103,9 +103,6 @@ public class Func {
             Cross cross = crosses.get(i).clone();
             crosses_copy.add(cross);
             crossHashMap_copy.put(cross.crossID, cross);
-        }
-        for (int i = 0; i < priCars.size(); i++) {
-            priCars_copy.add(carHashMap_copy.get(priCars.get(i).carID));
         }
         for (int i = 0; i < cars_copy.size(); i++) {
             Car car = cars_copy.get(i);
@@ -166,7 +163,6 @@ public class Func {
         copyData.roads_copy = roads_copy;
         copyData.roadHashMap_copy = roadHashMap_copy;
         copyData.MTime = MTime;
-        copyData.priCars_copy = priCars_copy;
         copyData.carNumInRoad = carNumInRoad;
         copyData.carsNumLimit = carsNumLimit;
         return copyData;
@@ -229,7 +225,7 @@ public class Func {
         });
         //处理car的道路矩阵处理
         Graph graphGlobal = new Graph();
-        graphGlobal.graphGlobal = new float[2][crosses.size()][crosses.size()];
+        graphGlobal.graphGlobal = new float[3][crosses.size()][crosses.size()];
         graphGlobal.crossMapgraph = new HashMap<>();
         graphGlobal.graphMapCross = new HashMap<>();
 
@@ -263,6 +259,8 @@ public class Func {
         }
 
         for (int i = 0; i < cars_in.size(); i++) {
+            cars_in.get(i).startCross = crossHashMap.get(cars_in.get(i).startCrossID);
+            cars_in.get(i).endCross = crossHashMap.get(cars_in.get(i).endCrossID);
             cars_in.get(i).graph = graphGlobal;
             cars_in.get(i).graphMapCross = graphGlobal.graphMapCross;
             cars_in.get(i).crossMapgraph = graphGlobal.crossMapgraph;
@@ -302,14 +300,19 @@ public class Func {
     /**
      * 在用邻接矩阵adjMat表示的图中，求解从点s到点t的最短路径
      *
-     * @param adjMat 邻接矩阵
+     * @param adjMat 邻接矩阵,第一位距离，速度，拥挤率
      * @param s      起点
      * @param t      终点
      * @param
      * @return
      */
-    public float dijReslove(float[][] adjMat, int s, int t) {
-
+    public float dijReslove(float[][][] adjMatA, int s, int t) {
+        float[][] adjMat = new float[adjMatA[0].length][adjMatA[0].length];
+        for (int i = 0; i < adjMat.length; i++) {
+            for (int j = 0; j < adjMat.length; j++) {
+                adjMat[i][j] = adjMatA[0][i][j]*(1+4*adjMatA[2][i][j]);
+            }
+        }
         int IMAX = 0x3f3f3f3f;
         //判断参数是否正确
         if (s < 0 || t < 0 || s >= adjMat.length || t >= adjMat.length) {
