@@ -252,6 +252,9 @@ class Car implements Cloneable, Comparable<Car> {
     int maxTimeCount;
     int backupStartTime;
 
+    //是否是上个时间片留下的预置车辆
+    int ProPresetCarCount;
+
     public Car clone() {
         try {
             return (Car) super.clone();
@@ -339,6 +342,7 @@ class Car implements Cloneable, Comparable<Car> {
         this.kasi = false;
         this.presetRoadCount = 0;
         this.backupStartTime = planTime;
+        this.ProPresetCarCount = 0;
     }
 
     int getRealSpeedOnNowRoad() {
@@ -376,7 +380,7 @@ class Car implements Cloneable, Comparable<Car> {
         if (isPresetCar && cross.crossID == endCrossID && presetRoadCount == roadChoiceList.size()) {
             return GO_DOWN;
         }
-        if (nextRoad==null){
+        if (nextRoad == null) {
             System.out.println("error");
         }
         int nowRoadOrder, nextRoadOrder;
@@ -512,7 +516,7 @@ class Car implements Cloneable, Comparable<Car> {
      */
     Random random = new Random(4050);
 
-    public void getNxtChoice(Func func,int carNumInRoad) {
+    public void getNxtChoice(Func func, int carNumInRoad) {
         // 判断是否轮得到这辆车选择下一个路口，如果轮到了，进行选择，没有轮到，return；
         Cross cross;
         if (isForward)
@@ -957,6 +961,7 @@ class DispatchCenter {
     HashSet<Integer> carOnRoadHash;
     ArrayList<Car> cars;
     ArrayList<Car> priCars;
+    ArrayList<Car> presetPreTimeCars;
     ArrayList<Road> roads;
     ArrayList<Cross> crosses;//升序排列的路口
     HashMap<Integer, Road> roadHashMap;
@@ -977,17 +982,25 @@ class DispatchCenter {
         this.carHashMap = carHashMap;
         this.roadHashMap = roadHashMap;
         this.carOnRoadHash = new HashSet<>();
+
     }
 
     public boolean DispatchOneTimePiece() {
         //新时间片更新路网矩阵，进行负载均衡
         updateGraph();
+        //更新上个时间片留下的预置车辆
+        updateProPresetCar();
+
         methodCholce();
+
         markAllCars();
         //路上车进行集中选路
+        //先发上个时间片留下的预置车且优先车
+        runPriFirstAndProPresetCar();
         //nextRoadChoiceOnRoad();
         if (dispatchWaitCar()) {
             backTime--;
+            runPriFirstAndProPresetCar();
             runStartCar();
             checkCar();
             System.out.println("time:" + MTime);
@@ -995,6 +1008,47 @@ class DispatchCenter {
             return true;
         }
         return false;
+    }
+
+    private void updateProPresetCar() {
+        this.presetPreTimeCars = new ArrayList<>();
+        for (Car car : cars) {
+            if (!car.isFinish && car.isPresetCar && car.ProPresetCarCount != 0 && car.isStart == 0) {
+                presetPreTimeCars.add(car);
+            }
+        }
+        Collections.sort(presetPreTimeCars, new Comparator<Car>() {
+            @Override
+            public int compare(Car o1, Car o2) {
+                if (o1 != null && o2 != null) {
+                    if (o2.ProPresetCarCount != o1.ProPresetCarCount)
+                        return o2.ProPresetCarCount - o1.ProPresetCarCount;
+                    else
+                        return o1.carID - o2.carID;
+                }
+                return 0;
+            }
+        });
+    }
+
+    private void runPriFirstAndProPresetCar() {
+        //发上个时间片留下的预置且优先车辆
+        driveProPresetCars();
+        //发剩下的优先车辆
+        driveAllStartPriorityCars();
+    }
+
+    private void driveProPresetCars() {
+        Iterator<Car> iterator = presetPreTimeCars.iterator();
+        while (iterator.hasNext()) {
+            Car car = iterator.next();
+            if (car.isPriorityCar) {
+                if (runPriStartCar(car)) {
+                    iterator.remove();
+                    priCars.remove(car);
+                }
+            }
+        }
     }
 
     private void updateGraph() {
@@ -1018,26 +1072,18 @@ class DispatchCenter {
     private void nextRoadChoiceOnRoad() {
         for (int i = 0; i < cars.size(); i++) {
             Car car = cars.get(i);
-            if (!car.isFinish && car.isStart == Car.GONE){
-                car.getNxtChoice(func,carNumInRoad);
+            if (!car.isFinish && car.isStart == Car.GONE) {
+                car.getNxtChoice(func, carNumInRoad);
             }
         }
     }
 
     private void methodCholce() {
         //路上车辆控制逻辑
-        if (carNumInRoad < 2000) carsNumLimit=2000;
-        carsNumLimit+=20;
-        if (carNumInRoad > 4500) carsNumLimit=4500;
-//        for (int i = 0; i < cars.size(); i++) {
-//            if (cars.get(i).isPresetCar && !cars.get(i).isFinish) {
-//                if (carNumInRoad<2500) carsNumLimit=2500;
-//                else
-//                    carsNumLimit = 1000;
-//                return;
-//            }
-//        }
-        //carsNumLimit = 3000;
+        if (carNumInRoad < 2000) carsNumLimit = 2000;
+        carsNumLimit += 20;
+        if (carNumInRoad > 4500) carsNumLimit = 4500;
+
     }
 
     public void dispatchGoBack(CopyData originCopyData) {
@@ -1058,7 +1104,7 @@ class DispatchCenter {
         this.carHashMap = copyData.carHashMap_copy;
         this.roadHashMap = copyData.roadHashMap_copy;
         if (backTime <= 0) {
-            this.carsNumLimit = (int) (copyData.carsNumLimit-500);
+            this.carsNumLimit = (int) (copyData.carsNumLimit - 500);
             backTime = 5;
         }
     }
@@ -1127,7 +1173,7 @@ class DispatchCenter {
                     }
                 }
                 if (theTopPriorityCars.peek() != null)
-                    theTopPriorityCars.peek().getNxtChoice(func,carNumInRoad);
+                    theTopPriorityCars.peek().getNxtChoice(func, carNumInRoad);
 
                 crossRoadMap.put(new Pair<>(cross.crossID, road.roadID), theTopPriorityCars);
             }
@@ -1163,7 +1209,7 @@ class DispatchCenter {
      * dispatchWaitCar()
      */
     private boolean dispatchWaitCar() {
-        driveAllStartPriorityCars();
+
         if (crosses.size() == 0)
             return true;
         HashMap<Integer, Boolean> crossMap = new HashMap<>();
@@ -1214,7 +1260,7 @@ class DispatchCenter {
                                 carOnRoadHash.remove(topPriorityCar.carID);
                                 countMove++;
                             } else {
-                                topPriorityCar.getNxtChoice(func,carNumInRoad);
+                                topPriorityCar.getNxtChoice(func, carNumInRoad);
                                 if (!topPriorityCar.getDirectionResult(crossRoadMap)) {//发生了冲突
                                     break;
                                 }
@@ -1248,7 +1294,7 @@ class DispatchCenter {
                             }
                             putNextTopPriorityCarIntoHashMap(cross, road, carRoad, tempChannel, tempOffset, crossRoadMap);
                             //driveAllStartPriorityCars();
-                            driveSingleStartPriorityCars(road,tempForward);
+                            driveSingleStartPriorityCars(road, tempForward);
                         } else {
                             System.out.println("error");
                         }
@@ -1270,14 +1316,14 @@ class DispatchCenter {
                 if (!crossMap.get(crosstmp.crossID)) {
                     bAllCrossesDispatch = false;
                     break;
-                }else {
+                } else {
                     bAllCrossesDispatch = true;
                 }
             }
             if (bAllCrossesDispatch) {
                 return true;
             }
-            if (countMove == 0 && carNumInRoad!=0) {
+            if (countMove == 0 && carNumInRoad != 0) {
                 //System.out.println("go back");
                 return false;
             }
@@ -1285,10 +1331,21 @@ class DispatchCenter {
     }
 
     private void driveSingleStartPriorityCars(Road road, boolean tempForward) {
+        Iterator<Car> iteratorPreset = presetPreTimeCars.iterator();
+        while (iteratorPreset.hasNext()) {
+            Car car = iteratorPreset.next();
+            if (car.isPriorityCar) {
+                if (runPriStartCar(car)) {
+                    iteratorPreset.remove();
+                    priCars.remove(car);
+                }
+            }
+        }
+
         Iterator<Car> iterator = priCars.iterator();
         while (iterator.hasNext()) {
             Car car = iterator.next();
-            if (car.nowRoad.roadID == road.roadID && car.isStart == 1 && car.isForward==tempForward) {
+            if (car.nowRoad.roadID == road.roadID && car.isStart == 1 && car.isForward == tempForward) {
                 if (runPriStartCar(car))
                     iterator.remove();
             }
@@ -1312,6 +1369,8 @@ class DispatchCenter {
                     carOnRoadHash.add(priorityCar.carID);
                     priorityCar.roadOffset = forwordInfo.toPosition;
                     carOnRoad[j][priorityCar.roadOffset] = priorityCar;
+                    //TODO:如果是预置车，清空计数
+                    if (priorityCar.isPresetCar) priorityCar.ProPresetCarCount = 0;
                     if (!priorityCar.isPresetCar)
                         priorityCar.roadChoiceList.add(priorityCar.nowRoad.roadID);
                     return true;
@@ -1507,13 +1566,9 @@ class DispatchCenter {
         }
     }
 
+    //发普通车辆
     public void runStartCar() {
-        driveAllStartPriorityCars();
-        for (Car car : priCars) {
-            car.isStart = 0;
-            car.minStartTime++;
-            car.realStartTime++;
-        }
+
         ArrayList<Car> limitSpeed = new ArrayList<>();
         for (int i = 0; i < cars.size(); i++) {
             if (cars.get(i).minStartTime == MTime && cars.get(i).isStart == 0 && !cars.get(i).isPriorityCar && !cars.get(i).isPresetCar) {
@@ -1556,6 +1611,37 @@ class DispatchCenter {
             car.minStartTime++;
             car.realStartTime++;
         }
+
+        //先发上个时间片留下来的预置车
+        for (Car car : presetPreTimeCars) {
+            if (car.isStart == 1 && !car.isFinish) {
+                Car[][] carOnRoad = car.getCarArray();
+                for (int i = 0; i < car.nowRoad.channelCount; i++) {
+                    if (carOnRoad[i][car.nowRoad.roadLength - 1] == null) {
+                        car.isStart = 2;
+                        car.nowRoadChannel = i;
+                        car.realStartTime = MTime;
+                        car.flag = Car.END_STATUS;
+                        car.isFinishedAtTimePiece = true;
+                        carNumInRoad++;
+                        carOnRoadHash.add(car.carID);
+                        ForwordInfo forwordInfo = car.getTypeOfForwordCar();
+                        car.roadOffset = forwordInfo.toPosition;
+                        carOnRoad[i][car.roadOffset] = car;
+                        car.ProPresetCarCount = 0;
+                        break;
+                    }
+                }
+                if (car.isStart == 1) {
+                    car.ProPresetCarCount++;
+                    car.isStart = 0;
+                    car.minStartTime++;
+                    car.realStartTime++;
+                }
+            }
+        }
+
+        //发不是留下来预置车的普通车
         for (Car car : cars) {
             if (car.isStart == 1 && !car.isFinish) {
                 Car[][] carOnRoad = car.getCarArray();
@@ -1576,11 +1662,20 @@ class DispatchCenter {
                     }
                 }
                 if (car.isStart == 1) {
+                    if (car.isPresetCar) car.ProPresetCarCount++;
                     car.isStart = 0;
                     car.minStartTime++;
                     car.realStartTime++;
                 }
             }
+        }
+
+        //更新优先车的东西
+        for (Car car : priCars) {
+            if (car.isPresetCar) continue;
+            car.isStart = 0;
+            car.minStartTime++;
+            car.realStartTime++;
         }
     }
 }
