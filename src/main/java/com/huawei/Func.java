@@ -300,7 +300,7 @@ public class Func {
     /**
      * 在用邻接矩阵adjMat表示的图中，求解从点s到点t的最短路径
      *
-     * @param adjMat 邻接矩阵,第一位距离，速度，拥挤率
+     * @param  adjMatA,第一位距离，速度，拥挤率
      * @param s      起点
      * @param t      终点
      * @param
