@@ -3,16 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="14b5b4a0-6a0e-441a-a96c-1ccfb4413fb0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/Car.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/Car.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/CarPos.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/CarPos.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/Cross$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/Cross$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/Cross.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/Cross.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/DispatchCenter$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/DispatchCenter$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/DispatchCenter$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/DispatchCenter$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/DispatchCenter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/DispatchCenter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/ForwordInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/ForwordInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/Graph.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/Graph.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/Road.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/Road.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/main/com/huawei/Func.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/main/com/huawei/Func.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/huawei/Func.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/huawei/Func.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/huawei/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/huawei/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/huawei4_4.zip" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -57,26 +53,27 @@
     <session id="118220537">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="16" />
+          <entry key="project.closed" value="17" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.1" value="3" />
+          <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.12" value="2" />
           <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="6" />
           <entry key="project.open.time.8" value="2" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="17" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="5736" />
+          <entry key="java" value="5833" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="5736" />
+          <entry key="JAVA" value="5833" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -96,8 +93,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="1037" column="36" selection-start-line="1037" selection-start-column="36" selection-end-line="1037" selection-end-column="36" />
+            <state relative-caret-position="215">
+              <caret line="1084" column="52" selection-start-line="1084" selection-start-column="52" selection-end-line="1084" selection-end-column="52" />
               <folding>
                 <element signature="class#CopyData#0" />
                 <element signature="class#Pair#0" />
@@ -110,6 +107,10 @@
                 <element signature="e#6948#6949#0" expanded="true" />
                 <element signature="e#6974#6975#0" expanded="true" />
                 <element signature="method#equals#0;class#Pair#0" />
+                <element signature="method#CopyDispatchTimePieceData#0;class#DispatchCenter#0" />
+                <element signature="method#checkCar#0;class#DispatchCenter#0" />
+                <element signature="method#initialCrossRoadMap#0;class#DispatchCenter#0" />
+                <element signature="method#putNextTopPriorityCarIntoHashMap#0;class#DispatchCenter#0" />
                 <element signature="method#driveSingleStartPriorityCars#0;class#DispatchCenter#0" />
                 <element signature="method#runPriStartCar#0;class#DispatchCenter#0" />
               </folding>
@@ -120,8 +121,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Func.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4484">
-              <caret line="312" column="52" selection-start-line="312" selection-start-column="52" selection-end-line="312" selection-end-column="52" />
+            <state relative-caret-position="275">
+              <caret line="318" column="45" lean-forward="true" selection-start-line="318" selection-start-column="45" selection-end-line="318" selection-end-column="45" />
               <folding>
                 <element signature="method#readFile#0;class#Func#0" />
               </folding>
@@ -153,7 +154,6 @@
       <find>roads</find>
       <find>com</find>
       <find>runs</find>
-      <find>500</find>
       <find>go back</find>
       <find>900</find>
       <find>get</find>
@@ -170,6 +170,7 @@
       <find>100</find>
       <find>mins</find>
       <find>4000</find>
+      <find>500</find>
     </findStrings>
     <replaceStrings>
       <replace>float</replace>
@@ -190,8 +191,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/huawei/Road.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huawei/DispContral.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/testhuawei/Test.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/huawei/Func.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/huawei/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/huawei/Func.java" />
       </list>
     </option>
   </component>
@@ -213,6 +214,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -255,14 +258,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554565263931" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554602202331" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../JudgeTool" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -287,7 +288,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.map1">
+  <component name="RunManager" selected="Application.map2">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.huawei.Main" />
       <module name="main" />
@@ -359,18 +360,19 @@
       <workItem from="1554482758243" duration="1532000" />
       <workItem from="1554521142329" duration="4666000" />
       <workItem from="1554540287171" duration="10517000" />
-      <workItem from="1554561822598" duration="3403000" />
+      <workItem from="1554561822598" duration="7142000" />
+      <workItem from="1554601935062" duration="232000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="126161000" />
+    <option name="totallyTimeSpent" value="130163000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27144772" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27479893" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -547,10 +549,20 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/DispContral.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Test.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/com/testhuawei/Test.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Func.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="318" column="45" lean-forward="true" selection-start-line="318" selection-start-column="45" selection-end-line="318" selection-end-column="45" />
+          <folding>
+            <element signature="method#readFile#0;class#Func#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="1037" column="36" selection-start-line="1037" selection-start-column="36" selection-end-line="1037" selection-end-column="36" />
+        <state relative-caret-position="215">
+          <caret line="1084" column="52" selection-start-line="1084" selection-start-column="52" selection-end-line="1084" selection-end-column="52" />
           <folding>
             <element signature="class#CopyData#0" />
             <element signature="class#Pair#0" />
@@ -563,18 +575,12 @@
             <element signature="e#6948#6949#0" expanded="true" />
             <element signature="e#6974#6975#0" expanded="true" />
             <element signature="method#equals#0;class#Pair#0" />
+            <element signature="method#CopyDispatchTimePieceData#0;class#DispatchCenter#0" />
+            <element signature="method#checkCar#0;class#DispatchCenter#0" />
+            <element signature="method#initialCrossRoadMap#0;class#DispatchCenter#0" />
+            <element signature="method#putNextTopPriorityCarIntoHashMap#0;class#DispatchCenter#0" />
             <element signature="method#driveSingleStartPriorityCars#0;class#DispatchCenter#0" />
             <element signature="method#runPriStartCar#0;class#DispatchCenter#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/huawei/Func.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4484">
-          <caret line="312" column="52" selection-start-line="312" selection-start-column="52" selection-end-line="312" selection-end-column="52" />
-          <folding>
-            <element signature="method#readFile#0;class#Func#0" />
           </folding>
         </state>
       </provider>

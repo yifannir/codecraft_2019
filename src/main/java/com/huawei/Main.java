@@ -1080,9 +1080,9 @@ class DispatchCenter {
 
     private void methodCholce() {
         //路上车辆控制逻辑
-        if (carNumInRoad < 2000) carsNumLimit = 2000;
-        carsNumLimit += 20;
-        if (carNumInRoad > 4500) carsNumLimit = 4500;
+        if (carNumInRoad < 3000) carsNumLimit = 3000;
+        carsNumLimit += 50;
+        if (carNumInRoad > 5000) carsNumLimit = 4500;
 
     }
 

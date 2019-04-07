@@ -310,7 +310,7 @@ public class Func {
         float[][] adjMat = new float[adjMatA[0].length][adjMatA[0].length];
         for (int i = 0; i < adjMat.length; i++) {
             for (int j = 0; j < adjMat.length; j++) {
-                adjMat[i][j] = adjMatA[0][i][j]*(1+4*adjMatA[2][i][j]);
+                adjMat[i][j] = adjMatA[0][i][j]*(1+5*adjMatA[2][i][j]);
             }
         }
         int IMAX = 0x3f3f3f3f;
