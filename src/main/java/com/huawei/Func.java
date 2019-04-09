@@ -1,5 +1,7 @@
 package com.huawei;
 
+import sun.reflect.generics.tree.Tree;
+
 import java.io.*;
 import java.util.*;
 
@@ -83,7 +85,6 @@ public class Func {
         ArrayList<Car> cars_copy = new ArrayList<>();
         ArrayList<Road> roads_copy = new ArrayList<>();
         ArrayList<Cross> crosses_copy = new ArrayList<>();
-        ArrayList<Car> priCars_copy = new ArrayList<>();
         HashMap<Integer, Road> roadHashMap_copy = new HashMap<>();
         HashMap<Integer, Car> carHashMap_copy = new HashMap<>();
         HashMap<Integer, Cross> crossHashMap_copy = new HashMap<>();
@@ -137,6 +138,16 @@ public class Func {
                     }
                 }
             }
+            TreeSet<Car> forwordStartCarsCopy = new TreeSet<>(Car.startCarComparator);
+            TreeSet<Car> endStartCarsCopy = new TreeSet<>(Car.startCarComparator);
+            for(Iterator<Car> iterator = roadHashMap.get(road.roadID).forwordStartCars.iterator();iterator.hasNext();){
+                forwordStartCarsCopy.add(carHashMap_copy.get(iterator.next().carID));
+            }
+            for(Iterator<Car> iterator = roadHashMap.get(road.roadID).endStartCars.iterator();iterator.hasNext();){
+                endStartCarsCopy.add(carHashMap_copy.get(iterator.next().carID));
+            }
+            road.forwordStartCars = forwordStartCarsCopy;
+            road.endStartCars = endStartCarsCopy;
             road.carOnRoad = carsCopy;
             road.carOnDuplexRoad = carsOnDulpexCopy;
             road.fromCross = road.fromCross == null ? null : crossHashMap_copy.get(road.fromCross.crossID);
@@ -223,9 +234,9 @@ public class Func {
                 return 0;
             }
         });
-        //处理car的道路矩阵处理
+        //处理car的道路矩阵处理,第一维分别是长度，速度，拥挤率，车道数
         Graph graphGlobal = new Graph();
-        graphGlobal.graphGlobal = new float[3][crosses.size()][crosses.size()];
+        graphGlobal.graphGlobal = new float[4][crosses.size()][crosses.size()];
         graphGlobal.crossMapgraph = new HashMap<>();
         graphGlobal.graphMapCross = new HashMap<>();
 
@@ -236,7 +247,7 @@ public class Func {
                 if (k == j) {
                     graphGlobal.graphGlobal[0][k][j] = 0;
                 } else {
-                    graphGlobal.graphGlobal[0][k][j] = 0x3f3f3f;
+                    graphGlobal.graphGlobal[0][k][j] = 0x3f3f3f3f;
                 }
             }
         }
@@ -249,11 +260,15 @@ public class Func {
                     [graphGlobal.graphMapCross.get(roads.get(j).toCross.crossID)] = len;
             graphGlobal.graphGlobal[1][graphGlobal.graphMapCross.get(roads.get(j).fromCross.crossID)]
                     [graphGlobal.graphMapCross.get(roads.get(j).toCross.crossID)] = road.speedLimitofRoad;
+            graphGlobal.graphGlobal[3][graphGlobal.graphMapCross.get(roads.get(j).fromCross.crossID)]
+                    [graphGlobal.graphMapCross.get(roads.get(j).toCross.crossID)] = road.channelCount;
             if (roads.get(j).isDuplex) {
                 graphGlobal.graphGlobal[0][graphGlobal.graphMapCross.get(roads.get(j).toCross.crossID)]
                         [graphGlobal.graphMapCross.get(roads.get(j).fromCross.crossID)] = len;
                 graphGlobal.graphGlobal[1][graphGlobal.graphMapCross.get(roads.get(j).toCross.crossID)]
                         [graphGlobal.graphMapCross.get(roads.get(j).fromCross.crossID)] = road.speedLimitofRoad;
+                graphGlobal.graphGlobal[3][graphGlobal.graphMapCross.get(roads.get(j).toCross.crossID)]
+                        [graphGlobal.graphMapCross.get(roads.get(j).fromCross.crossID)] = road.channelCount;
 
             }
         }
@@ -292,74 +307,33 @@ public class Func {
 
     public boolean allCarFinished(ArrayList<Car> cars) {
         for (Car car : cars) {
-            if (!car.isFinish) return false;
+            if (!car.isFinish)
+                return false;
         }
         return true;
     }
 
+
     /**
-     * 在用邻接矩阵adjMat表示的图中，求解从点s到点t的最短路径
-     *
-     * @param  adjMatA,第一位距离，速度，拥挤率
-     * @param s      起点
-     * @param t      终点
-     * @param
-     * @return
+     * floyd算法
      */
-    public float dijReslove(float[][][] adjMatA, int s, int t) {
-        float[][] adjMat = new float[adjMatA[0].length][adjMatA[0].length];
-        for (int i = 0; i < adjMat.length; i++) {
-            for (int j = 0; j < adjMat.length; j++) {
-                adjMat[i][j] = adjMatA[0][i][j]*(1+5*adjMatA[2][i][j]);
-            }
-        }
+
+    public void floyd(double[][] dist){
         int IMAX = 0x3f3f3f3f;
-        //判断参数是否正确
-        if (s < 0 || t < 0 || s >= adjMat.length || t >= adjMat.length) {
-            System.out.println("错误，顶点不在图中!");
-            return IMAX;
-        }
-
-        //用来记录某个顶点是否已经完成遍历，即替代优先队列的"移出队列"动作
-        boolean[] isVisited = new boolean[adjMat.length];
-        //用于存储从s到各个点之间的最短路径长度
-        float[] d = new float[adjMat.length];
-
-        //初始化数据
-        for (int i = 0; i < adjMat.length; i++) {
-            isVisited[i] = false;
-            d[i] = IMAX;
-        }
-        d[s] = 0; //s到s的距离是0
-        isVisited[s] = true; //将s标记为已访问过的
-
-        //尚未遍历的顶点数目，替代优先队列是否为空的判断即Queue.isEmpty()
-        int unVisitedNum = adjMat.length;
-        //用于表示当前所保存的子路径中权重最小的顶点的索引,对应优先队列中,默认是起点
-        int index = s;
-        while (unVisitedNum > 0 && index != t) {
-            float min = IMAX;
-            for (int i = 0; i < adjMat.length; i++) { //取到第i行的最小元素的索引
-                if (min > d[i] && !isVisited[i]) {
-                    min = d[i];
-                    index = i;
+        for (int k = 0; k < dist.length; k++) {
+            for (int i = 0; i < dist.length; i++) {
+                for (int j = 0; j < dist.length; j++) {
+                    // 如果经过下标为k顶点路径比原两点间路径更短，则更新dist[i][j]和path[i][j]
+                    double tmp = (dist[i][k]==IMAX || dist[k][j]==IMAX) ? IMAX : (dist[i][k] + dist[k][j]);
+                    if (dist[i][j] > tmp) {
+                        // "i到j最短路径"对应的值设，为更小的一个(即经过k)
+                        dist[i][j] = tmp;
+                    }
                 }
             }
-            if (index == t || unVisitedNum == 0) {
-                //System.out.print(index); //打印最短路径
-            } else {
-                //System.out.print(index + "=>"); //打印最短路径
-            }
-            for (int i = 0; i < adjMat.length; i++) {
-                if (d[index] + adjMat[index][i] < d[i]) {
-                    d[i] = d[index] + adjMat[index][i];
-                }
-            }
-            unVisitedNum--;
-            isVisited[index] = true;
         }
-        return d[t];
     }
+
 
 
     public void processPresetCar(HashMap<Integer, Car> carsHashMap, String presetAnswerPath) {
