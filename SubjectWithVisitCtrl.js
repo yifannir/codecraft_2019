@@ -1,28 +1,28 @@
-import React, { Component } from 'react';
-import {Route, Link, Redirect, Switch,BrowserRouter,Prompt} from 'react-router-dom';
-import { Modal } from "antd";
+import React, {Component} from 'react';
+import {Route, Link, Redirect, Switch, BrowserRouter, Prompt} from 'react-router-dom';
+import {Modal} from "antd";
 import VisitManager from "./VisitManager"
 import MenuAndContentLayout from '../../../layout/MenuAndContentLayout';
 import MenuSupportsVisitCtrl from "../visitcontrol/MenuSupportsVisitCtrl"
 import ReportCardManager from "../ReportCardManager";
 import InProgressOnLeaveConfirm from "./InProgressOnLeaveConfirm";
 import pic from "../../../resources/intro/pic.jpg"
+
 const horn = require("../../horn/horn");
 
 function ModalFor3SecondsDisplay(onClose) {
     let secondsToGo = 2;
 
-
     const modal = Modal.success({
         //title: '临时对话框',
-        width:700,
+        width: 700,
         content:
             <div>
-                <img src={pic} width="100%" height="100%"  alt=""/>
+                <img src={pic} width="100%" height="100%" alt=""/>
             </div>,
-        icon :null,
-        okText :"确定",
-        mask:true,
+        icon: null,
+        okText: "确定",
+        mask: true,
     });
     const timer = setInterval(() => {
         secondsToGo -= 1;
@@ -32,9 +32,9 @@ function ModalFor3SecondsDisplay(onClose) {
                     <img src={pic} width="100%" height="100%" alt=""/>
 
                 </div>,
-            icon :null,
+            icon: null,
 
-            
+
         });
     }, 1000);
 
@@ -49,11 +49,10 @@ function ModalFor3SecondsDisplay(onClose) {
 }
 
 
-
 function VisitControlListener(owner) {
     this.owner = owner;
     this.handleMsg = msg => {
-        if(msg.type === "GuideAction"){
+        if (msg.type === "GuideAction") {
             switch (msg.action) {
                 case "VisitIntro":
                     break;
@@ -83,7 +82,7 @@ function VisitControlListener(owner) {
  * subjectId    需要展示的subject的id
  */
 class SubjectWithVisitCtrl extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.visitCtrlHorn = new horn();
@@ -98,16 +97,18 @@ class SubjectWithVisitCtrl extends Component {
         this.state = {
             routeInfo: routeInfo,
             redirects: this.getRedirects({subjectRouteInfo: routeInfo}),
-            routedComponents : this.visitCtrl.getRoutedComponents(),
+            routedComponents: this.visitCtrl.getRoutedComponents(),
         };
 
     }
 
     componentDidMount() {
         this.visitCtrl.handleVisitSubject(
-            ()=>{
+            () => {
                 ModalFor3SecondsDisplay(
-                    ()=>{this.jumpTo("/intro")}
+                    () => {
+                        this.jumpTo("/intro")
+                    }
                 )
             }
         );
@@ -118,18 +119,18 @@ class SubjectWithVisitCtrl extends Component {
         let sectionId = undefined;
         let introPath = undefined;
         let sections = this.state.routeInfo.sections;
-        for (let i=0;i<sections.length;i++){
-            if (sections[i].name === name){
+        for (let i = 0; i < sections.length; i++) {
+            if (sections[i].name === name) {
                 sectionId = sections[i].id;
                 introPath = sections[i].intro.path;
                 break;
             }
         }
 
-        if (sectionId && introPath){
+        if (sectionId && introPath) {
             this.visitCtrl.handleVisitSection(
                 sectionId,
-                ()=>{
+                () => {
                     this.jumpTo(introPath);
                     this.updateVisitCtrl();
                 }
@@ -179,7 +180,7 @@ class SubjectWithVisitCtrl extends Component {
         let redirects = [];
 
         let sections = sectionsRouteInfo;
-        for (let i=0;i<sections.length;i++){
+        for (let i = 0; i < sections.length; i++) {
             let section = sections[i];
 
             if (section.intro.disabled)
@@ -189,8 +190,8 @@ class SubjectWithVisitCtrl extends Component {
                 ));
 
             let exps = section.experiments;
-            for (let i=0;i<exps.length;i++){
-                if (exps[i].disabled){
+            for (let i = 0; i < exps.length; i++) {
+                if (exps[i].disabled) {
                     redirects.push(routeRedirect(
                         exps[i].path,
                         "/"
@@ -199,8 +200,8 @@ class SubjectWithVisitCtrl extends Component {
             }
 
             let excs = section.exercises;
-            for (let i=0;i<excs.length;i++){
-                if (excs[i].disabled){
+            for (let i = 0; i < excs.length; i++) {
+                if (excs[i].disabled) {
                     redirects.push(routeRedirect(
                         excs[i].path,
                         "/"
@@ -215,9 +216,11 @@ class SubjectWithVisitCtrl extends Component {
         return (
             <InProgressOnLeaveConfirm
                 horn={this.visitCtrlHorn}
-                onConfirm={()=>{this.setState({
-                    routedComponents: this.visitCtrl.getRoutedComponents()
-                })}}
+                onConfirm={() => {
+                    this.setState({
+                        routedComponents: this.visitCtrl.getRoutedComponents()
+                    })
+                }}
             >
                 <MenuAndContentLayout
                     Menu={
@@ -229,8 +232,8 @@ class SubjectWithVisitCtrl extends Component {
                     Content={
                         <div>
                             <Jumper ref={
-                                (e)=>{
-                                    if (e !== null){
+                                (e) => {
+                                    if (e !== null) {
                                         this.jumpTo = e.jumpTo;
                                     }
                                 }}
@@ -241,7 +244,7 @@ class SubjectWithVisitCtrl extends Component {
                                        component={Home}>
                                 </Route>
                                 {/*<Route path="/debugger"*/}
-                                       {/*component={SimplifiedDebugUI_layout2}>*/}
+                                {/*component={SimplifiedDebugUI_layout2}>*/}
                                 {/*</Route>*/}
                                 {this.state.routedComponents}
                             </Switch>
@@ -253,8 +256,8 @@ class SubjectWithVisitCtrl extends Component {
     }
 }
 
-class Jumper extends Component{
-    constructor(props){
+class Jumper extends Component {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -270,31 +273,31 @@ class Jumper extends Component{
     };
 
     render() {
-        if (this.state.target !== undefined){
+        if (this.state.target !== undefined) {
             this.setState({
                 target: undefined
             })
         }
 
-        if (this.props.onComplete){
+        if (this.props.onComplete) {
             this.props.onComplete();
         }
 
 
-            return(
+        return (
             this.state.target === undefined ?
                 <div></div>
                 :
-            <Redirect
-                from={"/"}
-                to={this.state.target}
-            />
+                <Redirect
+                    from={"/"}
+                    to={this.state.target}
+                />
         )
     }
 }
 
-class Home extends Component{
-    render(){
+class Home extends Component {
+    render() {
         return (
             <div>
                 <div style={{height: '100px'}}/>
@@ -305,7 +308,7 @@ class Home extends Component{
 }
 
 function routeRedirect(from, to) {
-    return(
+    return (
         <Redirect
             exact
             from={from}
